@@ -57,39 +57,23 @@ public:
 	// Rysowanie linii
 	void DrawLine(int x0, int y0, int x1, int y1, ALLEGRO_COLOR color)
 	{
-		int x, y;
-		float dx, dy, m;
 
-		dx = x1 - x0;
-		dy = y1 - y0;
-
-		if (abs(dx) > abs(dy))
-		{ // Jeœli nachylenie jest mniejsze ni¿ 1 (dominuj¹ca oœ X)
-			if (x0 > x1) { // Jeœli zaczynamy od prawej strony, zamieniamy punkty miejscami
-				swap(x0, x1);
-				swap(y0, y1);
+		int dx = abs(x1 - x0);
+		int dy = abs(y1 - y0);
+		int stepY = (y0 < y1) ? 1 : -1;
+		int stepX = (x0 < x1) ? 1 : -1;
+		int error = dx - dy;
+		int error2;
+		while (x0 != x1 || y0 != y1) {
+			al_draw_pixel(x0, y0, color);
+			error2 = error + error;
+			if (error2 > -dy) {
+				error -= dy;
+				x0 += stepX;
 			}
-
-			m = dy / dx;
-			y = y0;
-			for (x = x0; x <= x1; x++) {
-				PutPixel(x, (int)(y + 0.5), color); // Rysowanie pikseli
-				y += m;
-			}
-		}
-		else 
-		{ // Jeœli nachylenie jest wiêksze ni¿ 1 (dominuj¹ca oœ Y)
-			if (y0 > y1) 
-			{ // Jeœli zaczynamy od do³u, zamieniamy punkty miejscami
-				swap(x0, x1);
-				swap(y0, y1);
-			}
-
-			m = dx / dy;
-			x = x0;
-			for (y = y0; y <= y1; y++) {
-				al_put_pixel((int)(x + 0.5), y, color); // Rysowanie pikseli
-				x += m;
+			if (error2 < dx) {
+				error += dx;
+				y0 += stepY;
 			}
 		}
 		//al_flip_display();
@@ -678,7 +662,7 @@ int main()
 	Point2D punkt(400, 300, engine.red);
 
 	// Rysowanie punktu
-/*	punkt.DrawPoint(rysuj);
+	punkt.DrawPoint(rysuj);
 
 	// Wyœietla wspó³rzêdne w konsoli
 	
@@ -690,8 +674,8 @@ int main()
 	Point2D endPoint(200, 450, engine.blue);
 	LineSegment segment(startPoint, endPoint);
 	segment.DrawSegment(rysuj);
-	*/
-	rysuj.DrawLine(100, 150, 200, 450, red);
+	
+
 	al_flip_display();
 	Sleep(2000);
 	
@@ -703,15 +687,15 @@ int main()
 	al_flip_display();
 	Sleep(1000);
 
-//	rysuj.DrawRectangle(300, 10, 400, 110, red);
+	rysuj.DrawRectangle(300, 10, 400, 110, red);
 
-//	rysuj.DrawFilledRectangle(700, 500, 800, 600, red);
-//	rysuj.DrawFilledCircle(300, 300, 50, blue);
-//	rysuj.DrawFilledTriangle(50, 50, 100, 100, 50, 90, white);
+	rysuj.DrawFilledRectangle(700, 500, 800, 600, red);
+	rysuj.DrawFilledCircle(300, 300, 50, blue);
+	rysuj.DrawFilledTriangle(50, 50, 100, 100, 50, 90, white);
 
-//	rysuj.DrawFilledRectangle(700, 500, 800, 600, red);
-//	rysuj.FloodFill(750, 550, blue);
-	rysuj.DrawLine(50, 50, 50, 100, blue);
+	rysuj.DrawFilledRectangle(700, 500, 800, 600, red);
+	rysuj.FloodFill(750, 550, blue);
+	rysuj.DrawLine(50, 50,100, 300, blue);
 
 
 
