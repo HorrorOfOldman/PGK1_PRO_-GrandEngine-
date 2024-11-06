@@ -405,6 +405,178 @@ private:
 	}
 };
 
+
+/// //// /// //
+
+class GameObject {
+public:
+	virtual ~GameObject() = default;
+	virtual void update() = 0;
+	virtual void draw() = 0;
+};
+
+class UpdatableObject : virtual public GameObject {
+public:
+	virtual ~UpdatableObject() = default;
+	virtual void update() = 0;
+};
+
+class DrawableObject : virtual public GameObject {
+public:
+	virtual ~DrawableObject() = default;
+	virtual void draw() = 0;
+};
+
+class TransformableObject : virtual public GameObject {
+public:
+	virtual ~TransformableObject() = default;
+	virtual void translate(float x, float y) = 0;
+	virtual void rotate(float angle) = 0;
+	virtual void scale(float scaleX, float scaleY) = 0;
+};
+
+class ShapeObject : public DrawableObject, public TransformableObject {
+public:
+	virtual ~ShapeObject() = default;
+	virtual void draw() = 0;
+	virtual void translate(float dx, float dy) = 0;
+	virtual void rotate(float angle) = 0;
+	virtual void scale(float scaleX, float scaleY) = 0;
+};
+
+class Circle : public ShapeObject {
+private:
+	float x, y;
+	float radius;
+	ALLEGRO_COLOR color;
+
+public:
+	Circle(float x, float y, float radius, ALLEGRO_COLOR color)
+		: x(x), y(y), radius(radius), color(color) {}
+
+	void update() override {
+		// Mo¿emy dodaæ logikê aktualizacji
+	}
+
+	void draw() override {
+		al_draw_filled_circle(x, y, radius, color);
+	}
+
+	void translate(float dx, float dy) override {
+		x += dx;
+		y += dy;
+	}
+
+	void rotate(float angle) override {
+		// Okr¹g nie zmienia siê przy obrocie, ale moglibyœmy dodaæ logikê
+	}
+
+	void scale(float scaleX, float scaleY) override {
+		radius *= scaleX; // Zmieniamy promieñ
+	}
+};
+
+class Rectangle : public ShapeObject {
+private:
+	float x, y, width, height;
+	ALLEGRO_COLOR color;
+
+public:
+	Rectangle(float x, float y, float width, float height, ALLEGRO_COLOR color)
+		: x(x), y(y), width(width), height(height), color(color) {}
+
+	void update() override {
+		// Aktualizacja logiki
+	}
+
+	void draw() override {
+		al_draw_filled_rectangle(x, y, x + width, y + height, color);
+	}
+
+	void translate(float dx, float dy) override {
+		x += dx;
+		y += dy;
+	}
+
+	void rotate(float angle) override {
+		// Przyk³ad obrotu prostok¹ta (nale¿y zmieniæ wspó³rzêdne w zale¿noœci od k¹ta)
+	}
+
+	void scale(float scaleX, float scaleY) override {
+		width *= scaleX;
+		height *= scaleY;
+	}
+};
+// // / // / / // 
+
+class Player
+{
+
+	public:
+		Player(float width, float height, float startX, float startY)
+			: rectWidth(width), rectHeight(height), posX(startX), posY(startY), speed(4.0f), up(false), down(false), left(false), right(false)
+		{
+			color = al_map_rgb(0, 255, 0); // Kolor gracza - zielony
+		}
+
+		void scale(float size)
+		{
+			rectWidth *= size;
+			rectHeight *= size;
+		}
+
+		void processEvents(ALLEGRO_EVENT& event)
+		{
+			if (event.type == ALLEGRO_EVENT_KEY_DOWN)
+			{
+				if (event.keyboard.keycode == ALLEGRO_KEY_W) up = true;
+				if (event.keyboard.keycode == ALLEGRO_KEY_S) down = true;
+				if (event.keyboard.keycode == ALLEGRO_KEY_A) left = true;
+				if (event.keyboard.keycode == ALLEGRO_KEY_D) right = true;
+			}
+			else if (event.type == ALLEGRO_EVENT_KEY_UP)
+			{
+				if (event.keyboard.keycode == ALLEGRO_KEY_W) up = false;
+				if (event.keyboard.keycode == ALLEGRO_KEY_S) down = false;
+				if (event.keyboard.keycode == ALLEGRO_KEY_A) left = false;
+				if (event.keyboard.keycode == ALLEGRO_KEY_D) right = false;
+			}
+		}
+
+		void update()
+		{
+			if (up)    posY -= speed;
+			if (down)  posY += speed;
+			if (left)  posX -= speed;
+			if (right) posX += speed;
+		}
+
+		void drawTo(PrimitiveRenderer& renderer)
+		{
+			renderer.DrawRectangle(posX, posY, rectWidth, rectHeight, color);
+		}
+
+
+		float getX() const { return posX; }
+		float getY() const { return posY; }
+
+		void setPosition(float x, float y)
+		{
+			posX = x;
+			posY = y;
+		}
+
+	private:
+		float posX, posY;
+		float rectWidth, rectHeight;
+		float speed;
+		bool up, down, left, right;
+		ALLEGRO_COLOR color; // Kolor gracza
+};
+
+/// ///////
+
+
 class Engine
 {
 private:
@@ -418,6 +590,8 @@ private:
 	int fps;
 
 	PrimitiveRenderer r1;
+//	Player player;
+	
 
 public:
 	ALLEGRO_COLOR white = al_map_rgb(255, 255, 255);
@@ -453,6 +627,7 @@ public:
 		al_install_keyboard();
 		al_install_mouse();
 		al_init_primitives_addon();
+
 
 		// W³¹czamy podwójne buforowanie (domyœlne w Allegro)
 		al_set_new_display_option(ALLEGRO_SINGLE_BUFFER, 0, ALLEGRO_SUGGEST);  // Wy³¹czamy pojedyncze buforowanie
@@ -536,6 +711,8 @@ public:
 				// Rysowanie ekranu
 				//ClearScreen(al_map_rgb(0, 0, 0)); // Czarny ekran
 				// Dodaj kod rysowania elementów gry
+				
+
 				al_flip_display();  // Zamiana buforów po rysowaniu
 			}
 			else if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
@@ -570,10 +747,8 @@ public:
 			float side_length = 100; // D³ugoœæ boku kwadratu
 			float x_start = 10;      // Pocz¹tkowa pozycja X
 			float y_start = 10;      // Pocz¹tkowa pozycja Y
-			ALLEGRO_COLOR color = al_map_rgb(255, 0, 0); // Kolor kwadratu (czerwony)
-
 			// Rysowanie kwadratu o boku `side_length`
-			r1.DrawRectangle(x_start, y_start, side_length, side_length, color);
+			r1.DrawRectangle(x_start, y_start, side_length, side_length, red);
 
 			// Odœwie¿ ekran, aby wyœwietliæ rysunek
 			al_flip_display();
@@ -589,6 +764,24 @@ public:
 		{
 			ClearScreen(al_map_rgb(0, 0, 0)); // Czarny ekran
 			cout << "Special 2\n";
+		}
+		if (keycode == ALLEGRO_KEY_F1)
+		{
+			screen_width = 800; // Domyœlna szerokoœæ
+			screen_height = 600; // Domyœlna wysokoœæ
+			fullscreen = false;
+
+			al_resize_display(display,screen_width, screen_height);
+			cout << "F1 - okno standard(800x600)\n";
+		}
+		if (keycode == ALLEGRO_KEY_F2)
+		{
+			screen_width = 400; // Domyœlna szerokoœæ
+			screen_height = 300; // Domyœlna wysokoœæ
+			fullscreen = true;
+
+			al_resize_display(display, screen_width, screen_height);
+			cout << "F2 - (400x300)\n";
 		}
 		// Dodaj obs³ugê innych klawiszy
 	}
@@ -638,6 +831,15 @@ public:
 
 };
 
+///////////////////
+
+
+
+
+
+
+
+//ONLY IN DEATH DOES DUTY END//
 // G³ówna funkcja
 int main()
 {
@@ -696,8 +898,6 @@ int main()
 	rysuj.DrawFilledRectangle(700, 500, 800, 600, red);
 	rysuj.FloodFill(750, 550, blue);
 	rysuj.DrawLine(50, 50,100, 300, blue);
-
-
 
 
 	al_flip_display();
