@@ -15,7 +15,7 @@
 
 class Point2D
 {
-private:
+public:
 	int x, y; // Wspó³rzêdne punktu
 	ALLEGRO_COLOR color; // Kolor punktu
 

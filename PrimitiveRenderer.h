@@ -1,6 +1,8 @@
 #pragma once
 #include<stack>
 #include <iostream>
+#include <vector>
+#include <cmath>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro.h>
 class PrimitiveRenderer
@@ -63,6 +65,14 @@ public:
 	// Flood Fill Algorithm (iteracyjny)
 	void FloodFill(int x, int y, ALLEGRO_COLOR fillColor);
 	
+
+	///////////// Poligon
+	
+
+
+
 	// testownik
+	void DisplayImage(const char* filePath, float x, float y, float scaleX, float scaleY);
+
 	void xd(int x, int y, int size, ALLEGRO_COLOR color);
 };

@@ -88,6 +88,7 @@ int main()
 	rysuj.FloodFill(750, 550, blue);
 	rysuj.DrawLine(50, 50,100, 300, blue);
 
+	rysuj.DisplayImage("testGr/0001.png", 100, 100, 1.0, 1.0);
 
 	al_flip_display();
 	Sleep(1000);

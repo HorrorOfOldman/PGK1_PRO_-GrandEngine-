@@ -197,6 +197,10 @@ void Engine::HandleKeyboard(int keycode)
 		al_resize_display(display, screen_width, screen_height);
 		cout << "F2 - (400x300)\n";
 	}
+	if (keycode == ALLEGRO_KEY_0)
+	{
+		r1.DisplayImage("testGr/Alice.jpg", 10, 100, 0.5, 0.5);
+	}
 	// Dodaj obs³ugê innych klawiszy
 }
 

@@ -1,8 +1,13 @@
 #include"PrimitiveRenderer.h"
+#include "Point2D.h"
+#include "LineSegment.h"
 #include<stack>
 #include <iostream>
+#include <vector>
+#include <cmath>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro.h>
+#include <allegro5/allegro_image.h>
 using namespace std;
 #define M_PI 3.14
 
@@ -253,7 +258,41 @@ bool PrimitiveRenderer::CompareColors(ALLEGRO_COLOR c1, ALLEGRO_COLOR c2)
 		cout << "Obszar wypelniony (flood fill)\n";
 	}
 
+	//////Poligon
+
+
 	// testownik
+	void PrimitiveRenderer::DisplayImage(const char* filePath, float x, float y, float scaleX, float scaleY)
+	{
+		// Inicjalizacja modu³u do obs³ugi obrazów, jeœli jeszcze nie zosta³a wykonana
+		if (!al_init_image_addon())
+		{
+			cerr << "Blad: Nie udalo sie zainicjalizowac dodatku do obrazow!" << endl;
+			return;
+		}
+
+		// £adowanie obrazu z pliku
+		ALLEGRO_BITMAP* image = al_load_bitmap(filePath);
+		if (!image)
+		{
+			cerr << "Blad: Nie udalo sie zaladowac obrazu: " << filePath << endl;
+			return;
+		}
+
+		// Skaluje obraz do podanych rozmiarów
+		int width = al_get_bitmap_width(image) * scaleX;
+		int height = al_get_bitmap_height(image) * scaleY;
+
+		// Wyœwietlanie obrazu na ekranie w okreœlonym miejscu i rozmiarze
+		al_draw_scaled_bitmap(image, 0, 0, al_get_bitmap_width(image), al_get_bitmap_height(image), x, y, width, height, 0);
+
+		// Wyœwietlanie obrazu na ekranie
+		al_flip_display();
+
+		// Usuwanie bitmapy, aby zwolniæ pamiêæ
+		al_destroy_bitmap(image);
+	}
+
 	void PrimitiveRenderer::xd(int x, int y, int size, ALLEGRO_COLOR color)
 	{
 
