@@ -5,6 +5,7 @@
 #include <cmath>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro.h>
+#define M_PI 3.14
 class PrimitiveRenderer
 {
 public:
