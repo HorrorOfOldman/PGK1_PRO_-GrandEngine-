@@ -162,7 +162,7 @@ void Engine::HandleKeyboard(int keycode)
 		float x_start = 10;      // Pocz¹tkowa pozycja X
 		float y_start = 10;      // Pocz¹tkowa pozycja Y
 		// Rysowanie kwadratu o boku `side_length`
-		r1.DrawRectangle(x_start, y_start, side_length, side_length, red);
+		r1.DrawRectangle(x_start, y_start, side_length, side_length);
 
 		// Odœwie¿ ekran, aby wyœwietliæ rysunek
 		al_flip_display();

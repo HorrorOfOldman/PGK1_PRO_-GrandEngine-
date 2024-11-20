@@ -9,6 +9,7 @@ class PrimitiveRenderer
 {
 public:
 	PrimitiveRenderer() {}
+	ALLEGRO_COLOR Ucolor = al_map_rgb(255, 255, 255);
 
 public:
 	ALLEGRO_COLOR white = al_map_rgb(255, 255, 255);
@@ -16,6 +17,8 @@ public:
 	ALLEGRO_COLOR green = al_map_rgb(0, 255, 0);
 	ALLEGRO_COLOR blue = al_map_rgb(0, 0, 255);
 	ALLEGRO_COLOR black = al_map_rgb(0, 0, 0);
+
+	void SetColor(ALLEGRO_COLOR color);
 
 	// Funkcja pomocnicza do pobierania koloru piksela
 	ALLEGRO_COLOR GetPixel(int x, int y);
@@ -26,36 +29,36 @@ public:
 	//// Funkcje rysuj¹ce///////////////////////////////////
 
 	//zrób pixel
-	void PutPixel(int x0, int y0, ALLEGRO_COLOR color);
+	void PutPixel(int x0, int y0);
 	
 	// Rysowanie linii
-	void DrawLine(int x0, int y0, int x1, int y1, ALLEGRO_COLOR color);
+	void DrawLine(int x0, int y0, int x1, int y1);
 	
 	// Rysowanie okrêgu- zwyk³a
-	void DrawCircle(int x0, int y0, int R, ALLEGRO_COLOR color);
+	void DrawCircle(int x0, int y0, int R);
 	
 	// Metoda rysuj¹ca okr¹g za pomoc¹ 8-krotnej symetrii (algorytm Bresenhama)
-	void DrawCircleSymmetry(int x0, int y0, int R, ALLEGRO_COLOR color);
+	void DrawCircleSymmetry(int x0, int y0, int R);
 	
 	// Rysowanie elipsy
-	void DrawEllipse(int x0, int y0, int Rx, int Ry, ALLEGRO_COLOR color);
+	void DrawEllipse(int x0, int y0, int Rx, int Ry);
 	
 	// Funkcja do rysowania prostok¹ta
-	void DrawRectangle(int x0, int y0, int x1, int y1, ALLEGRO_COLOR color);
+	void DrawRectangle(int x0, int y0, int x1, int y1);
 	
 	// Funkcja do rysowania trójk¹ta
-	void DrawTriangle(int x0, int y0, int x1, int y1, int x2, int y2, ALLEGRO_COLOR color);
+	void DrawTriangle(int x0, int y0, int x1, int y1, int x2, int y2);
 	
 	//// Kolorowanie metod¹ - MA DZIA£AÆ ////////////////////////
 
 	// Wype³niony prostok¹t
-	void DrawFilledRectangle(int x0, int y0, int x1, int y1, ALLEGRO_COLOR color);
+	void DrawFilledRectangle(int x0, int y0, int x1, int y1);
 	
 	// Funkcja do rysowania wype³nionego trójk¹ta (metoda skan-linii)
-	void DrawFilledTriangle(int x0, int y0, int x1, int y1, int x2, int y2, ALLEGRO_COLOR color);
+	void DrawFilledTriangle(int x0, int y0, int x1, int y1, int x2, int y2);
 	
 	// Wype³niony okr¹g (rysowanie linii poziomych dla ka¿dego "ringu")
-	void DrawFilledCircle(int x0, int y0, int R, ALLEGRO_COLOR color);
+	void DrawFilledCircle(int x0, int y0, int R);
 
 	//// Inteligentniejsze kolorowanie - to o którym wspomina³ ³ukawski na wyk³adzie /////////////////////////////////////
 

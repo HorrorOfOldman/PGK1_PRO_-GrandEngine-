@@ -12,16 +12,22 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/keyboard.h>
 #include <allegro5/mouse.h>
+#define M_PI 3.14
 
 class Point2D
 {
-public:
+private:
 	int x, y; // Wspó³rzêdne punktu
 	ALLEGRO_COLOR color; // Kolor punktu
+	//float x, y;
+	
 
 public:
+	float getX() const { return x; }
+	float getY() const { return y; }
 	// Konstruktor domyœlny
-	Point2D() : x(0), y(0), color(al_map_rgb(255, 255, 255)) {}
+	Point2D(float x = 0.0f, float y = 0.0f, ALLEGRO_COLOR color = al_map_rgb(255, 255, 255))
+		: x(x), y(y), color(color) {}
 
 	// Konstruktor z parametrami (pozycja + kolor)
 	Point2D(int x, int y, ALLEGRO_COLOR color) : x(x), y(y), color(color) {}
@@ -42,4 +48,8 @@ public:
 
 	// Metoda do wyœwietlania wspó³rzêdnych w konsoli
 	void DisplayCoordinates() const;
+
+	void translate(float dx, float dy);
+	void rotate(float angle);
+	void scale(float sx, float sy);
 };

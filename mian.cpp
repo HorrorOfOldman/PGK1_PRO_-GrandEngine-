@@ -1,5 +1,6 @@
 //https://www.youtube.com/watch?v=QTqNVHtc_us
 #include "Engine.h"
+#include "polygon.h"
 #include "PrimitiveRenderer.h"
 #include "Point2D.h"
 #include "LineSegment.h"
@@ -48,7 +49,7 @@ int main()
 
 	// Utworzenie obiektu PrimitiveRenderer
 	PrimitiveRenderer rysuj;
-
+	rysuj.SetColor(red);
 	// Utworzenie punktu 
 	Point2D punkt(400, 300, engine.red);
 
@@ -70,25 +71,34 @@ int main()
 	al_flip_display();
 	Sleep(2000);
 	
+	vector<Point2D> vertices = {
+		Point2D(400, 100),
+		Point2D(500, 300),
+		Point2D(400, 500),
+		Point2D(300, 400)
+	};
 
 	// narysuj okr¹g za pomoc¹ symetrii
-	rysuj.DrawCircleSymmetry(100, 100, 50, red);
+	rysuj.DrawCircleSymmetry(100, 100, 50);
 	// elipsa za pomoca symetrii
-	rysuj.DrawEllipse(300, 300, 50, 70, blue);
+	rysuj.DrawEllipse(300, 300, 50, 70);
 	al_flip_display();
 	Sleep(1000);
+	rysuj.SetColor(blue);
+	rysuj.DrawRectangle(300, 10, 400, 110);
+	
+	rysuj.DrawFilledRectangle(700, 500, 800, 600);
+	rysuj.DrawFilledCircle(300, 300, 50);
+	rysuj.DrawFilledTriangle(50, 50, 100, 100, 50, 90);
 
-	rysuj.DrawRectangle(300, 10, 400, 110, red);
-
-	rysuj.DrawFilledRectangle(700, 500, 800, 600, red);
-	rysuj.DrawFilledCircle(300, 300, 50, blue);
-	rysuj.DrawFilledTriangle(50, 50, 100, 100, 50, 90, white);
-
-	rysuj.DrawFilledRectangle(700, 500, 800, 600, red);
+	rysuj.DrawFilledRectangle(700, 500, 800, 600);
 	rysuj.FloodFill(750, 550, blue);
-	rysuj.DrawLine(50, 50,100, 300, blue);
+	rysuj.DrawLine(50, 50,100, 300);
 
 	rysuj.DisplayImage("testGr/0001.png", 100, 100, 1.0, 1.0);
+	
+	rysuj.SetColor(white);
+	drawPolygon(vertices, rysuj);
 
 	al_flip_display();
 	Sleep(1000);
