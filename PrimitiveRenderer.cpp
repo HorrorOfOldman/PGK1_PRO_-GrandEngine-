@@ -11,6 +11,10 @@
 using namespace std;
 #define M_PI 3.14
 
+void PrimitiveRenderer::SetColor(ALLEGRO_COLOR color)
+{
+	this->Ucolor = color;
+}
 
 // Funkcja pomocnicza do pobierania koloru piksela
 ALLEGRO_COLOR PrimitiveRenderer::GetPixel(int x, int y)
@@ -26,14 +30,14 @@ bool PrimitiveRenderer::CompareColors(ALLEGRO_COLOR c1, ALLEGRO_COLOR c2)
 
 //// Funkcje rysuj¹ce///////////////////////////////////
 	//zrób pixel
-	void PrimitiveRenderer::PutPixel(int x0, int y0, ALLEGRO_COLOR color)
+	void PrimitiveRenderer::PutPixel(int x0, int y0)
 	{
-		al_put_pixel(x0, y0, color);
+		al_put_pixel(x0, y0,this->Ucolor);
 		//al_flip_display();
 	}
 
 	// Rysowanie linii
-	void PrimitiveRenderer::DrawLine(int x0, int y0, int x1, int y1, ALLEGRO_COLOR color)
+	void PrimitiveRenderer::DrawLine(int x0, int y0, int x1, int y1)
 	{
 		int dx = abs(x1 - x0);
 		int dy = abs(y1 - y0);
@@ -42,7 +46,7 @@ bool PrimitiveRenderer::CompareColors(ALLEGRO_COLOR c1, ALLEGRO_COLOR c2)
 		int error = dx - dy;
 		int error2;
 		while (x0 != x1 || y0 != y1) {
-			al_draw_pixel(x0, y0, color);
+			PutPixel(x0, y0);
 			error2 = error + error;
 			if (error2 > -dy) {
 				error -= dy;
@@ -58,7 +62,7 @@ bool PrimitiveRenderer::CompareColors(ALLEGRO_COLOR c1, ALLEGRO_COLOR c2)
 	}
 
 	// Rysowanie okrêgu- zwyk³a
-	void PrimitiveRenderer::DrawCircle(int x0, int y0, int R, ALLEGRO_COLOR color)
+	void PrimitiveRenderer::DrawCircle(int x0, int y0, int R)
 	{
 		float a, step;
 		int x, y;
@@ -66,14 +70,14 @@ bool PrimitiveRenderer::CompareColors(ALLEGRO_COLOR c1, ALLEGRO_COLOR c2)
 		for (a = 0; a < 2 * M_PI; a += step) {
 			x = x0 + R * cos(a) + 0.5; // Zaokr¹glone X
 			y = y0 + R * sin(a) + 0.5; // Zaokr¹glone Y
-			al_put_pixel(x, y, color);
+			PutPixel(x, y);
 		}
 		//al_flip_display();
 		cout << "Circle Drawed\n";
 	}
 
 	// Metoda rysuj¹ca okr¹g za pomoc¹ 8-krotnej symetrii (algorytm Bresenhama)
-	void PrimitiveRenderer::DrawCircleSymmetry(int x0, int y0, int R, ALLEGRO_COLOR color)
+	void PrimitiveRenderer::DrawCircleSymmetry(int x0, int y0, int R)
 	{
 		int x = 0;
 		int y = R;
@@ -81,14 +85,14 @@ bool PrimitiveRenderer::CompareColors(ALLEGRO_COLOR c1, ALLEGRO_COLOR c2)
 		while (y >= x)
 		{
 			// 8-krotna symetria
-			PutPixel(x0 + x, y0 + y, color);
-			PutPixel(x0 - x, y0 + y, color);
-			PutPixel(x0 + x, y0 - y, color);
-			PutPixel(x0 - x, y0 - y, color);
-			PutPixel(x0 + y, y0 + x, color);
-			PutPixel(x0 - y, y0 + x, color);
-			PutPixel(x0 + y, y0 - x, color);
-			PutPixel(x0 - y, y0 - x, color);
+			PutPixel(x0 + x, y0 + y);
+			PutPixel(x0 - x, y0 + y);
+			PutPixel(x0 + x, y0 - y);
+			PutPixel(x0 - x, y0 - y);
+			PutPixel(x0 + y, y0 + x);
+			PutPixel(x0 - y, y0 + x);
+			PutPixel(x0 + y, y0 - x);
+			PutPixel(x0 - y, y0 - x);
 
 			x++;
 			if (d > 0)
@@ -106,7 +110,7 @@ bool PrimitiveRenderer::CompareColors(ALLEGRO_COLOR c1, ALLEGRO_COLOR c2)
 	}
 
 	// Rysowanie elipsy
-	void PrimitiveRenderer::DrawEllipse(int x0, int y0, int Rx, int Ry, ALLEGRO_COLOR color)
+	void PrimitiveRenderer::DrawEllipse(int x0, int y0, int Rx, int Ry)
 	{
 		// Ustal minimalny krok
 		const float min_step = 0.01f; // Minimalny krok
@@ -124,30 +128,30 @@ bool PrimitiveRenderer::CompareColors(ALLEGRO_COLOR c1, ALLEGRO_COLOR c2)
 		{
 			int x = static_cast<int>(x0 + Rx * cos(angle) + 0.5f);  // Przemieszczenie w osi X
 			int y = static_cast<int>(y0 + Ry * sin(angle) + 0.5f);  // Przemieszczenie w osi Y
-			PutPixel(x, y, color);
+			PutPixel(x, y);
 		}
 		//al_flip_display();
 		cout << "Elipsa narysowana\n";
 	}
 
 	// Funkcja do rysowania prostok¹ta
-	void PrimitiveRenderer::DrawRectangle(int x0, int y0, int x1, int y1, ALLEGRO_COLOR color)
+	void PrimitiveRenderer::DrawRectangle(int x0, int y0, int x1, int y1)
 	{
-		DrawLine(x0, y0, x0, y1, color);
-		DrawLine(x0, y1, x1, y1, color);
-		DrawLine(x1, y1, x1, y0, color);
-		DrawLine(x1, y0, x0, y0, color);
+		DrawLine(x0, y0, x0, y1);
+		DrawLine(x0, y1, x1, y1);
+		DrawLine(x1, y1, x1, y0);
+		DrawLine(x1, y0, x0, y0);
 		//al_flip_display();
 		cout << "Prostokat prostokatuje\n";
 	}
 
 	// Funkcja do rysowania trójk¹ta
-	void PrimitiveRenderer::DrawTriangle(int x0, int y0, int x1, int y1, int x2, int y2, ALLEGRO_COLOR color)
+	void PrimitiveRenderer::DrawTriangle(int x0, int y0, int x1, int y1, int x2, int y2)
 	{
 		//   al_draw_triangle(x1, y1, x2, y2, x3, y3, color, thickness);
-		DrawLine(x0, y0, x1, y1, color);
-		DrawLine(x1, y1, x2, y2, color);
-		DrawLine(x2, y2, x0, y0, color);
+		DrawLine(x0, y0, x1, y1);
+		DrawLine(x1, y1, x2, y2);
+		DrawLine(x2, y2, x0, y0);
 		//al_flip_display();
 		cout << "Trujkatuje\n";
 	}
@@ -155,19 +159,19 @@ bool PrimitiveRenderer::CompareColors(ALLEGRO_COLOR c1, ALLEGRO_COLOR c2)
 	//// Kolorowanie metod¹ - MA DZIA£AÆ ////////////////////////
 
 	// Wype³niony prostok¹t
-	void PrimitiveRenderer::DrawFilledRectangle(int x0, int y0, int x1, int y1, ALLEGRO_COLOR color)
+	void PrimitiveRenderer::DrawFilledRectangle(int x0, int y0, int x1, int y1)
 	{
 		// Rysowanie prostok¹ta poprzez wype³nianie go liniami poziomymi
 		for (int y = y0; y <= y1; y++)
 		{
-			DrawLine(x0, y, x1, y, color); // Wype³nianie
+			DrawLine(x0, y, x1, y); // Wype³nianie
 		}
 		//al_flip_display();
 		cout << "Wypelniony prostokat narysowany\n";
 	}
 
 	// Funkcja do rysowania wype³nionego trójk¹ta (metoda skan-linii)
-	void PrimitiveRenderer::DrawFilledTriangle(int x0, int y0, int x1, int y1, int x2, int y2, ALLEGRO_COLOR color)
+	void PrimitiveRenderer::DrawFilledTriangle(int x0, int y0, int x1, int y1, int x2, int y2)
 	{
 		// Posortowanie wierzcho³ków wed³ug wspó³rzêdnych Y (y0 <= y1 <= y2)
 		if (y0 > y1) { std::swap(x0, x1); std::swap(y0, y1); }
@@ -183,18 +187,18 @@ bool PrimitiveRenderer::CompareColors(ALLEGRO_COLOR c1, ALLEGRO_COLOR c2)
 		for (int y = y0; y <= y2; y++) {
 			int x_start = (y <= y1) ? interpolate(x0, y0, x1, y1, y) : interpolate(x1, y1, x2, y2, y);
 			int x_end = interpolate(x0, y0, x2, y2, y);
-			DrawLine(x_start, y, x_end, y, color);
+			DrawLine(x_start, y, x_end, y);
 		}
 		//al_flip_display();
 		cout << "Wypelniony trojkat narysowany\n";
 	}
 
 	// Wype³niony okr¹g (rysowanie linii poziomych dla ka¿dego "ringu")
-	void PrimitiveRenderer::DrawFilledCircle(int x0, int y0, int R, ALLEGRO_COLOR color)
+	void PrimitiveRenderer::DrawFilledCircle(int x0, int y0, int R)
 	{
 		for (int y = -R; y <= R; y++) {
 			int dx = (int)sqrt(R * R - y * y); // Odleg³oœæ pozioma dla ka¿dego Y
-			DrawLine(x0 - dx, y0 + y, x0 + dx, y0 + y, color);
+			DrawLine(x0 - dx, y0 + y, x0 + dx, y0 + y);
 		}
 		//al_flip_display();
 		cout << "Wypelniony okrag narysowany\n";
@@ -217,7 +221,7 @@ bool PrimitiveRenderer::CompareColors(ALLEGRO_COLOR c1, ALLEGRO_COLOR c2)
 			ALLEGRO_COLOR currentColor = GetPixel(px, py);
 
 			if (!CompareColors(currentColor, borderColor) && !CompareColors(currentColor, fillColor)) {
-				PutPixel(px, py, fillColor);
+				PutPixel(px, py);
 
 				pixelStack.push({ px + 1, py });
 				pixelStack.push({ px - 1, py });
@@ -247,7 +251,7 @@ bool PrimitiveRenderer::CompareColors(ALLEGRO_COLOR c1, ALLEGRO_COLOR c2)
 			ALLEGRO_COLOR currentColor = GetPixel(px, py);
 
 			if (CompareColors(currentColor, targetColor)) {
-				PutPixel(px, py, fillColor);
+				PutPixel(px, py);
 
 				pixelStack.push({ px + 1, py });
 				pixelStack.push({ px - 1, py });
@@ -259,6 +263,7 @@ bool PrimitiveRenderer::CompareColors(ALLEGRO_COLOR c1, ALLEGRO_COLOR c2)
 	}
 
 	//////Poligon
+
 
 
 	// testownik
