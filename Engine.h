@@ -1,5 +1,6 @@
 #pragma once
 #include"PrimitiveRenderer.h"
+#include "Player.h"
 #include <iostream>
 #include <windows.h>
 #include <vector>
@@ -12,9 +13,21 @@
 #include <allegro5/keyboard.h>
 #include <allegro5/mouse.h>
 
+/**
+* @class Engine
+* @brief Klasa odpowiadaj¹ca za dzia³anie okna silnika
+*/
 class Engine
 {
 private:
+	/**
+	* @brief Elementy klasy
+	* @param screen_width - szerokoœc okna
+	* @param screen_height - wysokoœæ okna
+	* @param fullscreen - definiuje czy program ma siê uruchamiaæ w okienku, czy w pe³nym oknie
+	* @param running - definiuje stan silnika, wartoœæ false powoduje wy³¹czenie okna
+	* @param fps - definiuje liczbê klatek/sekundê(odœwierzanie ekranu) w silniku
+	*/
 	ALLEGRO_DISPLAY* display;
 	ALLEGRO_EVENT_QUEUE* event_queue;
 	ALLEGRO_TIMER* timer;
@@ -25,7 +38,7 @@ private:
 	int fps;
 
 	PrimitiveRenderer r1;
-	//	Player player;
+	Player player;
 
 
 public:
@@ -36,36 +49,84 @@ public:
 	ALLEGRO_COLOR black = al_map_rgb(0, 0, 0);
 
 public:
-	// Konstruktor
+	/**
+	* @brief Konstruktor klasy Engine
+	* 
+	* * Inicjalizuje obiekt klasy Engine z domyœlnymi ustawieniami.
+	*/
 	Engine();
 
-	// Inicjalizacja Allegro
+	/**
+	* @brief Inicjalizator biblioteki allegro
+	* 
+	* Zwraca wartoœæ FALSE gdy nie uda³o siê zainicjalizowaæ biblioteki graficznej
+	* Inicjalizuje inne elementy biblioteki
+	* Jak obs³uge myszy i klawiatury
+	*/
 	bool Init();
 
-	//Podanie rozmiaru okna w konsoli-do pretestów
+	/**
+	* @brief Pozwala na rêszne ustawienie rozdzielczoœci ekranu z poziomu konsoli
+	*/
 	void ScreenProperties();
 
-	// Ustawienia trybu graficznego (parametryzacja)
+	/**
+	 * @brief Ustawia parametry graficzne okna.
+	 *
+	 * @param width         Szerokoœæ okna w pikselach.
+	 * @param height        Wysokoœæ okna w pikselach.
+	 * @param is_fullscreen Okreœla, czy okno dzia³a w trybie pe³noekranowym.
+	 */
 	void SetGraphicsMode(int width, int height, bool is_fullscreen);
 
-	// Parametryzacja innych ustawieñ (FPS, input)
+	/**
+	 * @brief Ustawia inne parametry gry, takie jak docelowa liczba klatek na sekundê.
+	 *
+	 * @param target_fps Docelowa liczba klatek na sekundê.
+	 */
 	void SetOtherSettings(int target_fps);
 
-	// G³ówna pêtla gry
+	/**
+	 * @brief G³ówna pêtla gry.
+	 *
+	 * Obs³uguje zdarzenia, aktualizuje stan gry i renderuje grafikê.
+	 */
 	void GameLoop();
 
-	// Obs³uga klawiatury
+	/**
+	 * @brief Obs³uguje zdarzenia klawiatury.
+	 *
+	 * @param keycode Kod klawisza, który zosta³ naciœniêty.
+	 */
 	void HandleKeyboard(int keycode);
 
-	// Obs³uga myszy
+	/**
+	* @brief Obs³uguje zdarzenia myszy.
+	*
+	* @param button Przycisk myszy, który zosta³ naciœniêty.
+	* @param x      Pozycja X kursora w momencie klikniêcia.
+	* @param y      Pozycja Y kursora w momencie klikniêcia.
+	*/
 	void HandleMouse(int button, int x, int y);
 
-	// Czyszczenie ekranu (bitmapy) do zadanego koloru
+	/**
+	 * @brief Czyœci ekran, wype³niaj¹c go podanym kolorem.
+	 *
+	 * @param color Kolor u¿ywany do wype³nienia ekranu.
+	 */
 	void ClearScreen(ALLEGRO_COLOR color);
 
-	// Logowanie b³êdów
+	/**
+	 * @brief Loguje b³êdy.
+	 *
+	 * Wyœwietla komunikat o b³êdzie w konsoli lub odpowiednim narzêdziu debuguj¹cym.
+	 *
+	 * @param message Treœæ komunikatu o b³êdzie.
+	 */
 	void LogError(const char* message);
 
-	// Zamykanie gry (deinicjacja Allegro)
+	/**
+	 * @brief Zamyka grê i deinicjalizuje bibliotekê Allegro.
+	 */
 	void Shutdown();
 };

@@ -20,7 +20,7 @@
 	{
 		int startX, startY, endX, endY;
 		GetCoordinates(startX, startY, endX, endY);
-		renderer.DrawLine(startX, startY, endX, endY, renderer.white); // Domyœlny kolor
+		renderer.DrawLine(startX, startY, endX, endY); 
 	}
 
 	// Metoda do rysowania przyrostowego (jeœli potrzebne)
@@ -35,8 +35,24 @@
 		float y = y0;
 
 		for (int i = 0; i <= step; i++) {
-			renderer.PutPixel((int)(x + 0.5), (int)(y + 0.5), renderer.white); // Rysowanie pikseli
+			renderer.PutPixel((int)(x + 0.5), (int)(y + 0.5)); // Rysowanie pikseli
 			x += xIncrement;
 			y += yIncrement;
 		}
 	}
+/*
+	void LineSegment::translate(float dx, float dy) {
+		p1.translate(dx, dy);
+		p2.translate(dx, dy);
+	}
+
+	void LineSegment::rotate(float angle) {
+		p1.rotate(angle);
+		p2.rotate(angle);
+	}
+
+	void LineSegment::scale(float sx, float sy) {
+		p1.scale(sx, sy);
+		p2.scale(sx, sy);
+	}
+*/

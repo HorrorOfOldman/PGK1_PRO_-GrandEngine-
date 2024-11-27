@@ -11,12 +11,13 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/keyboard.h>
 #include <allegro5/mouse.h>
+#include <allegro5/allegro_image.h>
 using namespace std;
 
 
 
 // Konstruktor
-Engine::Engine()
+Engine::Engine() : player(200,200)
 {
 	display = nullptr;
 	event_queue = nullptr;
@@ -38,6 +39,7 @@ bool Engine::Init()
 	}
 
 	// Inicjalizacja dodatków do Allegro
+	al_init_image_addon();
 	al_install_keyboard();
 	al_install_mouse();
 	al_init_primitives_addon();
@@ -76,7 +78,7 @@ void Engine::SetGraphicsMode(int width, int height, bool is_fullscreen)
 
 	display = al_create_display(screen_width, screen_height);
 	al_set_window_position(display, 300, 300);
-	al_set_window_title(display, "GrandeEngine(PapajEngine_WERSZYN)");
+	al_set_window_title(display, "GrandeEngine");
 
 	if (!display)
 	{
@@ -126,8 +128,12 @@ void Engine::GameLoop()
 			//ClearScreen(al_map_rgb(0, 0, 0)); // Czarny ekran
 			// Dodaj kod rysowania elementów gry
 
-
+			
+			//player.update();
+			ClearScreen(al_map_rgb(0, 0, 0)); // Czarny ekran
+			//player.draw();
 			al_flip_display();  // Zamiana buforów po rysowaniu
+
 		}
 		else if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
 		{
@@ -141,6 +147,10 @@ void Engine::GameLoop()
 		else if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
 		{
 			HandleMouse(ev.mouse.button, ev.mouse.x, ev.mouse.y); // Obs³uga myszy
+		}
+		else if (ev.type == ALLEGRO_EVENT_KEY_DOWN || ev.type == ALLEGRO_EVENT_KEY_UP )
+		{
+			player.keyevent(ev);
 		}
 
 
@@ -162,7 +172,7 @@ void Engine::HandleKeyboard(int keycode)
 		float x_start = 10;      // Pocz¹tkowa pozycja X
 		float y_start = 10;      // Pocz¹tkowa pozycja Y
 		// Rysowanie kwadratu o boku `side_length`
-		r1.DrawRectangle(x_start, y_start, side_length, side_length, red);
+		r1.DrawRectangle(x_start, y_start, side_length, side_length);
 
 		// Odœwie¿ ekran, aby wyœwietliæ rysunek
 		al_flip_display();
